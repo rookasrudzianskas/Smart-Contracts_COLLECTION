@@ -8,6 +8,7 @@ yarn-error.log*
 lerna-debug.log*
 /ethers-simple-storage/node_modules
 /ethers-simple-storage/.env
+/ethers-simple-storage/.encryptedKey.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
