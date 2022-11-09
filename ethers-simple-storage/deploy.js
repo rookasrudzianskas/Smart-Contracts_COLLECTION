@@ -14,6 +14,9 @@ async function main () {
     const binary = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.bin", "utf8");
 
     const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
+    console.log("Deploying contract...");
+    const contract = await contractFactory.deploy();
+    console.log(contract);
 }
 
 main()
