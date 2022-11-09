@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "fs-extra": "^10.1.0",
     "solc": "0.8.7-fixed"
