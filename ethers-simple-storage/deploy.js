@@ -21,7 +21,13 @@ async function main () {
     await contract.deployTransaction.wait(1);
 
     let currentFavoriteNumber = await contract.retrieve();
-    console.log("Current favorite number: ", currentFavoriteNumber);
+    console.log("Current favorite number: ", currentFavoriteNumber.toString());
+    console.log("Updating favorite number... ✳️");
+    const transactionResponse = await contract.store("42");
+    // Will wait 1 block for the transaction to be mined
+    const transactionReceipt = await transactionResponse.wait(1);
+    const updatedFavoriteNumber = await contract.retrieve();
+    console.log("Updated favorite number: ", updatedFavoriteNumber.toString());
 }
 
 main()
