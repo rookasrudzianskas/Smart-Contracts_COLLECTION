@@ -1,13 +1,16 @@
 
 
 async function main () {
-    function hi() {
-        console.log('hi');
-    }
-    hi();
-
+    // compile the contract
+    // compile the contract separately
 }
-main();
+
+main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error)
+        process.exit(1)
+    })
 
 
 // synchronous [solidity]
