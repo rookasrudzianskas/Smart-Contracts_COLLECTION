@@ -24,6 +24,21 @@
     "ts-node": ">=8.0.0"
   },
   "scripts": {
-    "test": "mocha server/**/*.test.js --timeout 10000"
+    "test": "mocha server/**/*.test.js --timeout 10000",
+    "testmain": "yarn hardhat test",
+    "test:staging": "yarn hardhat test --network goerli",
+    "test:mainnet": "yarn hardhat test --network mainnet",
+    "lint": "yarn solhint 'contracts/*.sol'",
+    "lint:fix": "yarn solhint 'contracts/*.sol' --fix",
+    "compile": "yarn hardhat compile",
+    "deploy": "yarn hardhat deploy",
+    "deploy:staging": "yarn hardhat deploy --network goerli",
+    "deploy:mainnet": "yarn hardhat deploy --network mainnet",
+    "deploy:mainnet:verify": "yarn hardhat deploy --network mainnet --verify",
+    "deploy:mainnet:verify:force": "yarn hardhat deploy --network mainnet --verify --force",
+    "deploy:mainnet:verify:force:constructor": "yarn hardhat deploy --network mainnet --verify --force --constructor-args ./scripts/constructor-args/mainnet.json",
+    "deploy:mainnet:verify:force:constructor:staging": "yarn hardhat deploy --network goerli --verify --force --constructor-args ./scripts/constructor-args/mainnet.json",
+    "format": "yarn prettier --write",
+    "coverage": "yarn hardhat coverage"
   }
 }
