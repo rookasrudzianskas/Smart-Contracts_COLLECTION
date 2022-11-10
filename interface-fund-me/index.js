@@ -49,6 +49,7 @@ function listenForTransactionMine(transactionResponse, provider) {
                 resolve();
             });
         } catch (error) {
+            reject(error);
             console.log(error);
         }
     });
