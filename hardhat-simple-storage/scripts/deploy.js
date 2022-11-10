@@ -1,4 +1,4 @@
-const hre = require("hardhat");
+const { ethers, run, network } = require("hardhat");
 
 async function main() {
 
