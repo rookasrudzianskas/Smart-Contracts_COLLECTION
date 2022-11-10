@@ -15,7 +15,17 @@ describe("SimpleStorage", function () {
         const expectedValue = "0";
         // assert or expect
         // and asset checks the test output if it is true or false
+        // assert.equal(currentValue.toString(), expectedValue);
+        expect(currentValue.toString()).to.equal(expectedValue);
+    });
+
+    it("Should update the favorite number", async function () {
+        const expectedValue = "7";
+        const transactionResponse = await simpleStorage.store(expectedValue);
+        await transactionResponse.wait(1);
+
+        const currentValue = await simpleStorage.retrieve();
         assert.equal(currentValue.toString(), expectedValue);
-    })
+    });
 })
 // describe("SimpleStorage", () => {})

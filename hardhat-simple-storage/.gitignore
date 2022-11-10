@@ -5,6 +5,7 @@ coverage.json
 typechain
 typechain-types
 .env.example
+gas-report.txt
 
 #Hardhat files
 cache
