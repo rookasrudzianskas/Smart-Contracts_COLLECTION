@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "author": "Rokas Rudzianskas",
   "devDependencies": {
     "@chainlink/contracts": "^0.5.1",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.4",
