@@ -13,18 +13,16 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     // if chainId is X use address Y
     // if chainId is z use address a
-    // const ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"];
     let ethUsdPriceFeedAddress;
+    // When going for localhost or hardhat network we want to use a mock.
     if(developmentChains.includes(network.name)){
+        //if the contract does not exist, we deploy minimal version
         const ethUsdAggregator = await deployments.get("MockV3Aggregator");
         ethUsdPriceFeedAddress = ethUsdAggregator.address;
     } else {
         ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"];
     }
 
-    //if the contract does not exist, we deploy minimal version
-
-    // When going for localhost or hardhat network we want to use a mock.
     const args = [ethUsdPriceFeedAddress];
     const fundMe = await deploy("FundMe", {
         from: deployer,
