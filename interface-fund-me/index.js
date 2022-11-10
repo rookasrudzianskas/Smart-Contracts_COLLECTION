@@ -1,4 +1,5 @@
 import { ethers } from "./ethers-5.6.esm.min.js";
+import { abi, contractAddress } from "./constants.js"
 
 const connectButton = document.getElementById("connectButton");
 const fundButton = document.getElementById("fundButton");
