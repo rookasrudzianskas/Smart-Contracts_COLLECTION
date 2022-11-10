@@ -21,11 +21,19 @@ async function connect() {
     }
 }
 
-async function fund(ethAmount) {
+async function fund() {
+    const ethAmount = "0.1"; // 10 ETH
     console.log(`Funding ${ethAmount} ETH`);
     if(typeof window.ethereum !== "undefined") {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        // const contract = new ethers.Contract(contractAddress, abi, signer);
+        const contract = new ethers.Contract(contractAddress, abi, signer);
+        try {
+            const transactionResponse = await contract.fund({
+                value: ethers.utils.parseEther(ethAmount),
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
