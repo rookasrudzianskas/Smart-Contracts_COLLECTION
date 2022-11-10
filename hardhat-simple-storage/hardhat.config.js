@@ -15,7 +15,12 @@ module.exports = {
     goerli: {
       url: GOERLI_RPC_URL,
       accounts: [PRIVATE_KEY],
-      chainId: 5, // or 4
+      chainId: 5, // or 4 for rinkeby
+    },
+    localhost: {
+      url: "http://127.0.0.1:8545/",
+      // accounts: Thanks hardhat! You're awesome!
+      chainId: 31337,
     }
   },
   solidity: "0.8.8",
