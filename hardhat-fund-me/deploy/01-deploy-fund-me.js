@@ -1,3 +1,4 @@
+const { network } = require("hardhat");
 const hre = require("hardhat");
 
 // module.exports = async function main(hre) {
@@ -5,5 +6,8 @@ const hre = require("hardhat");
 // }
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
-    console.log("deploying flashtoken!!");
+    const { deploy, log } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const chainId = network.config.chainId;
+
 }
