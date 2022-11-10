@@ -32,6 +32,7 @@ module.exports = {
       blockConfirmations: 6,
     },
   },
+  // We add a few versions of solidity to the config
   solidity: {
     compilers: [
       {
