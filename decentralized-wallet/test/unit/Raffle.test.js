@@ -136,6 +136,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
                 const startingAccountIndex = 1;
                 const accounts = await ethers.getSigners();
 
+                // a bunch of people enter the lottery
                 for(let i = startingAccountIndex; i < startingAccountIndex + additionalEntrances; i++) {
                     const accountConnectedRaffle = raffle.connect(accounts[i]);
                     await accountConnectedRaffle.enterRaffle({ value: raffleEntranceFee });
@@ -167,6 +168,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
                         }
                         resolve();
                     });
+                    // we perform upkeep and then fulfillrandomwords and this is exactly what this shit does
                     const tx = await raffle.performUpkeep("0x");
                     const txReceipt = await tx.wait(1);
                     const winnerStartingBalance = await accounts[1].getBalance();
