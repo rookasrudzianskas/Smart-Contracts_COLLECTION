@@ -3,8 +3,12 @@ import { abi, contractAddress } from "./constants.js"
 
 const connectButton = document.getElementById("connectButton");
 const fundButton = document.getElementById("fundButton");
+const balanceButton = document.getElementById("balanceButton");
+const withdrawButton = document.getElementById("withdrawButton");
 connectButton.onclick = connect;
 fundButton.onclick = fund;
+balanceButton.onclick = balance;
+withdrawButton.onclick = withdraw;
 
 async function connect() {
     if (typeof window.ethereum !== "undefined") {
@@ -21,6 +25,33 @@ async function connect() {
     }
 }
 
+
+async function withdraw() {
+    console.log(`Withdrawing...`);
+    if(typeof window.ethereum !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, abi, signer);
+        try {
+            const transactionResponse = await contract.withdraw();
+            await listenForTransactionMine(transactionResponse, provider);
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        withdrawButton.innerHTML = "Please install MetaMask";
+    }
+}
+
+async function balance() {
+    if(typeof window.ethereum !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const balance = await provider.getBalance(contractAddress);
+        console.log(`Balance: ${ethers.utils.formatEther(balance)}`);
+    }
+}
+
 async function fund() {
     const ethAmount = document.getElementById("ethAmount").value;
     console.log(`Funding ${ethAmount} ETH`);
@@ -34,6 +65,7 @@ async function fund() {
             });
             // listen for the tx to be mined
             await listenForTransactionMine(transactionResponse, provider);
+            document.getElementById("ethAmount").value = "";
         } catch (error) {
             console.log(error);
         }
