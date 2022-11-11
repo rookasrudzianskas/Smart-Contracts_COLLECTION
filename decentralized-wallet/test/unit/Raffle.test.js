@@ -172,6 +172,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
                     const tx = await raffle.performUpkeep("0x");
                     const txReceipt = await tx.wait(1);
                     const winnerStartingBalance = await accounts[1].getBalance();
+                    // ONLY THEN THIS TRANSACTION IS CALLED, we do the test 👆
                     await vrfCoordinatorV2Mock.fulfillRandomWords(
                         txReceipt.events[1].args.requestId,
                         raffle.address
