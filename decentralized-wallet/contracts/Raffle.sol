@@ -15,6 +15,9 @@ contract Raffle {
     uint256 private immutable i_entranceFee;
     address payable[] private s_players;
 
+    //Events
+    event.RaffleEnter(address indexed player);
+
     constructor(uint256 entranceFee) {
         i_entranceFee = entranceFee;
     }
@@ -24,7 +27,11 @@ contract Raffle {
         if(msg.value < i_entranceFee) { revert Raffle_NotEnoughETHEntered(); }
         // we keep track of all players
         s_players.push(payable(msg.sender));
-        // Events
+        // Events | emit an event when we  update a dynamic array or mapping
+        emit RaffleEnter(msg.sender);
+    }
+
+    function pickRandomWinner() {
 
     }
 
@@ -37,4 +44,3 @@ contract Raffle {
     }
 }
 
-// function pickRandomWinner() {}
