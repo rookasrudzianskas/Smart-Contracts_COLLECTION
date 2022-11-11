@@ -69,7 +69,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         i_interval = interval;
     }
 
-    function enterRaffle() public payable {
+    function enterRaffle() public payable {  // enterRaffle - enterRaffle
         // require msg.value > i_entranceFee
         if(msg.value < i_entranceFee) { revert Raffle__NotEnoughETHEntered(); }
         if(s_raffleState != RaffleState.OPEN) { revert Raffle__NotOpen(); }
@@ -182,6 +182,10 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     function getRequestConfirmations() public pure returns (uint256) {
         return REQUEST_CONFIRMATIONS;
+    }
+
+    function getInterval() public view returns (uint256) {
+        return i_interval;
     }
 }
 

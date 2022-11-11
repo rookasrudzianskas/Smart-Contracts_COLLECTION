@@ -12,6 +12,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     if(developmentChains.includes(network.name)) {
         const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
+        // await vrfCoordinatorV2Mock.addConsumer(subscriptionId.toNumber(), raffle.address);
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address;
         const transactionResponse = await vrfCoordinatorV2Mock.createSubscription();
         const transactionReceipt = await transactionResponse.wait(1);
@@ -36,6 +37,16 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     });
+
+    // Fixes the issue.
+    if (chainId == 31337) {
+        const vrfCoordinatorV2Mock = await ethers.getContract(
+            "VRFCoordinatorV2Mock"
+        );
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId.toNumber(), raffle.address)
+        log("adding consumer...")
+        log("Consumer added!")
+    }
 
     if(!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying Raffle contract...");
