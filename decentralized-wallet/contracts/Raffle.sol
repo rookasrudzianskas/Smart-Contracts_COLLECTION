@@ -12,9 +12,15 @@ import '@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol';
 import '@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol';
 import "@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol";
 
-error Raffle_NotEnoughETHEntered();
-error Raffle_TransferFailed();
-error Raffle_NotOpen();
+error Raffle__NotEnoughETHEntered();
+error Raffle__TransferFailed();
+error Raffle__NotOpen();
+error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
+
+// @title A sample raffel contract
+// @author Rokas Rudzianskas
+// @notice This contract is for creating an untamperable decentralized smart contract
+// @dev This contract implements Chainlink VRF V2 and Chainlink Keepers
 
 contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     // Type declarations
@@ -44,6 +50,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     event RequestedRaffleWinner(uint256 indexed requestId);
     event WinnerPicked(address indexed winner);
 
+    // Functions
     constructor(
         address vrfCoordinatorV2,
         uint256 entranceFee,
@@ -64,8 +71,8 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     function enterRaffle() public payable {
         // require msg.value > i_entranceFee
-        if(msg.value < i_entranceFee) { revert Raffle_NotEnoughETHEntered(); }
-        if(s_raffleState != RaffleState.OPEN) { revert Raffle_NotOpen(); }
+        if(msg.value < i_entranceFee) { revert Raffle__NotEnoughETHEntered(); }
+        if(s_raffleState != RaffleState.OPEN) { revert Raffle__NotOpen(); }
         // we keep track of all players
         s_players.push(payable(msg.sender));
         // Events | emit an event when we  update a dynamic array or mapping
@@ -78,16 +85,37 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     // 2. We have enough players
     // 3. Subscription funded with link
     // 4. Lottery should be in "open" state
-    function checkUpkeep(bytes calldata /* checkData */) external override returns(bool unkeepNeeded, bytes memory /* performData */) {
-        bool isOpen = (RaffleState.OPEN == s_raffleState);
-        // block timestamp - last timestamp
+    function checkUpkeep(
+        bytes memory /* checkData */
+    )
+    public
+    view
+    override
+    returns (
+        bool upkeepNeeded,
+        bytes memory /* performData */
+    )
+    {
+        bool isOpen = RaffleState.OPEN == s_raffleState;
         bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
-        bool hasPlayers = (s_players.length > 0);
+        bool hasPlayers = s_players.length > 0;
         bool hasBalance = address(this).balance > 0;
-        unkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
+        upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers);
+        return (upkeepNeeded, "0x0"); // can we comment this out?
     }
 
-    function requestRandomWinner() external {
+    function performUpkeep(
+        bytes calldata /* performData */
+    ) external override {
+        (bool upkeepNeeded, ) = checkUpkeep("");
+        // require(upkeepNeeded, "Upkeep not needed");
+        if (!upkeepNeeded) {
+            revert Raffle__UpkeepNotNeeded(
+                address(this).balance,
+                s_players.length,
+                uint256(s_raffleState)
+            );
+        }
         // Request a random number
         // Once we do, do something with it
         s_raffleState = RaffleState.CALCULATING;
@@ -112,10 +140,12 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         s_raffleState = RaffleState.OPEN;
         // Resets the players array
         s_players = new address payable[](0);
+        // Resets the last timestamp
+        s_lastTimeStamp = block.timestamp;
         (bool success, ) = recentWinner.call{ value: address(this).balance }("");
 
         if(!success) {
-            revert Raffle_TransferFailed();
+            revert Raffle__TransferFailed();
         }
         emit WinnerPicked(recentWinner);
     }
@@ -131,6 +161,14 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     function getRecentWinner() public view returns (address) {
         return s_recentWinner;
+    }
+
+    function getRaffleState() public view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    function getNumWords() public view returns (uint32) {
+        return NUM_WORDS;
     }
 }
 
