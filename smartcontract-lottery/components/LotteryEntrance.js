@@ -8,6 +8,8 @@ import {useNotification} from "@web3uikit/core";
 const LotteryEntrance = ({}) => {
     const {enableWeb3, account, isWeb3Enabled, deactivateWeb3, Moralis, isWeb3EnableLoading} = useMoralis();
     const [entranceFee, setEntranceFee] = useState("0");
+    const [numPlayers, setNumPlayers] = useState("0");
+    const [recentWinner, setRecentWinner] = useState("0");
     const {chainId: chainIdHex} = useMoralis();
     const chainId = parseInt(chainIdHex);
     const raffleAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
@@ -28,19 +30,40 @@ const LotteryEntrance = ({}) => {
         params: {},
     });
 
+    const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
+        abi: abi,
+        contractAddress: raffleAddress,
+        functionName: "getNumberOfPlayers",
+        params: {},
+    });
+
+    const { runContractFunction: getRecentWinner } = useWeb3Contract({
+        abi: abi,
+        contractAddress: raffleAddress,
+        functionName: "getRecentWinner",
+        params: {},
+    });
+
+    async function updateUI() {
+        const entranceFeeFromContract = (await getEntranceFee()).toString();
+        setEntranceFee(entranceFeeFromContract);
+        const numPlayersFromCall = (await getNumberOfPlayers()).toString();
+        setNumPlayers(numPlayersFromCall);
+        const recentWinnerFromCall = (await getRecentWinner()).toString();
+        setRecentWinner(recentWinnerFromCall);
+        // console.log("SOMETHING>>>", entranceFeeFromContract);
+    }
+
     useEffect(() => {
-        (async () => {
-            if(isWeb3Enabled) {
-                const entranceFeeFromContract = (await getEntranceFee()).toString();
-                setEntranceFee(entranceFeeFromContract);
-                // console.log("SOMETHING>>>", entranceFeeFromContract);
-            }
-        })();
+        if(isWeb3Enabled) {
+            updateUI();
+        }
     }, [isWeb3Enabled]);
 
     const handleSuccess = async (tx) => {
         await tx.wait(1);
         handleNewNotification();
+        updateUI();
     }
 
     const handleNewNotification = () => {
@@ -62,9 +85,21 @@ const LotteryEntrance = ({}) => {
                         <p className="text-2xl font-bold">Enter the lottery</p>
                         <p className="text-sm text-gray-500">Buy a ticket for {ethers.utils.formatUnits(entranceFee)} ETH</p>
                     </div>
+
+                    <div className="flex flex-row justify-between items-center">
+                        <p>Players</p>
+                        <p className="text-2xl font-bold">{numPlayers}</p>
+                    </div>
+
+                    <div className="flex flex-row items-center justify-between">
+                        <p>Recent winner</p>
+                        <p className="text-2xl font-bold">{recentWinner}</p>
+                    </div>
+
                     <button onClick={async () => {
                         await enterRaffle({
                             onSuccess: (e) => {
+                                // checks to see if the transaction was successful sent to metamask
                                 handleSuccess(e);
                             },
                             onError: (error) => {
