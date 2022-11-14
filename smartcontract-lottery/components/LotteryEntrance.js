@@ -6,7 +6,7 @@ import {ethers} from "ethers";
 import {useNotification} from "@web3uikit/core";
 
 const LotteryEntrance = ({}) => {
-    const {enableWeb3, account, isWeb3Enabled, deactivateWeb3, Moralis, isWeb3EnableLoading} = useMoralis();
+    const {enableWeb3, account, isWeb3Enabled, deactivateWeb3, Moralis, isWeb3EnableLoading, isFetching} = useMoralis();
     const [entranceFee, setEntranceFee] = useState("0");
     const [numPlayers, setNumPlayers] = useState("0");
     const [recentWinner, setRecentWinner] = useState("0");
@@ -29,6 +29,7 @@ const LotteryEntrance = ({}) => {
         functionName: "getEntranceFee",
         params: {},
     });
+
 
     const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
         abi: abi,
