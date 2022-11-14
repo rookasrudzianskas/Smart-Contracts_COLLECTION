@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {MoralisProvider, useMoralis} from "react-moralis";
 
 const ManualHeader = ({}) => {
     const {enableWeb3, account} = useMoralis();
+
+    useEffect(() => {
+        enableWeb3();
+    }, []);
 
     return (
         <div className="flex justify-between max-w-7xl mx-auto p-5 items-center">
@@ -10,7 +14,7 @@ const ManualHeader = ({}) => {
             <div>
                 {account ? (
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded duration-150">
-                        {account.slice(0, 5)}...{account.slice(-4)}
+                       Connected to - {account.slice(0, 5)}...{account.slice(-4)}
                     </button>
                 ) : (
                     <button onClick={async () => await enableWeb3()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded duration-150">
