@@ -1,6 +1,6 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import ManualHeader from '../components/ManualHeader';
 
 const Home: NextPage = () => {
     return (
@@ -10,9 +10,10 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
+            <ManualHeader />
 
         </div>
     )
 }
 
-export default Home
+export default Home;
