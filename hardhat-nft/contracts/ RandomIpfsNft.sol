@@ -86,7 +86,10 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
 
     function withdraw() public onlyOwner {
         uint256 amount = address(this).balance;
-        (bool, success)
+        (bool, success, ) = payable(msg.sender).call{value: amount}("");
+        if(!success) {
+            revert RandomIpfsNft__TransferFailed();
+        }
     }
 
     function getBreedFromModdedRng(uint256 moddedRng) public pure returns (Breed) {
