@@ -7,9 +7,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
-    let ethUsdPriceFeedAddress, vrfCoordinatorV2Address, subscriptionId;
+    let ethUsdPriceFeedAddress, vrfCoordinatorV2Address, subscriptionId, tokenUris;
 
     // get the ipfs hashes for the images
+    if(process.env.UPLOAD_TO_PINATA = "true") {
+        tokenUris = await handleTokenUris();
+    }
     // with our own IPFS node or programmatically
 
 
@@ -24,7 +27,8 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         subscriptionId = networkConfig[chainId].subscriptionId;
     }
 
-    log("----------------------------------------------------")
+    log("----------------------------------------------------");
+
     const args = [
         vrfCoordinatorV2Address,
         subscriptionId,
@@ -32,6 +36,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         networkConfig[chainId].callbackGasLimit,
         networkConfig[chainId].mintFee
     ];
+
+    async function handleTokenUris() {
+        tokenUris = [];
+        // store the image in IPFS and store data in IPFS
+
+        return tokenUris;
+    }
 
 
     // Verify the deployment
