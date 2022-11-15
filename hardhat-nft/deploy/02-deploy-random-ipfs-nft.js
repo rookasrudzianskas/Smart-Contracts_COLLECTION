@@ -18,28 +18,17 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2;
         subscriptionId = networkConfig[chainId].subscriptionId;
-
     }
 
-    // if (chainId == 31337) {
-    //     // Find ETH/USD price feed
-    //     const EthUsdAggregator = await deployments.get("MockV3Aggregator")
-    //     ethUsdPriceFeedAddress = EthUsdAggregator.address
-    // } else {
-    //     ethUsdPriceFeedAddress = networkConfig[chainId].ethUsdPriceFeed
-    // }
-    //
-    // const lowSVG = fs.readFileSync("./images/dynamicNft/frown.svg", { encoding: "utf8" })
-    // const highSVG = fs.readFileSync("./images/dynamicNft/happy.svg", { encoding: "utf8" })
-    //
-    // log("----------------------------------------------------")
-    // arguments = [ethUsdPriceFeedAddress, lowSVG, highSVG]
-    // const dynamicSvgNft = await deploy("DynamicSvgNft", {
-    //     from: deployer,
-    //     args: arguments,
-    //     log: true,
-    //     waitConfirmations: network.config.blockConfirmations || 1,
-    // })
+    log("----------------------------------------------------")
+    const args = [
+        vrfCoordinatorV2Address,
+        subscriptionId,
+        networkConfig[chainId].gasLane,
+        networkConfig[chainId].callbackGasLimit,
+        networkConfig[chainId].mintFee
+    ];
+
 
     // Verify the deployment
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
