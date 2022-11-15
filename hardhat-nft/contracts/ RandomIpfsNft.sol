@@ -38,6 +38,10 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
     string[] internal s_dogTokenUris;
     uint256 internal i_mintFee;
 
+    //Events requested
+    event NftRequested(uint256 indexed requestId, address requester);
+    event NftMinted(Breed dogBreed, address minter);
+
     constructor(
         address vrfCoordinatorV2,
         uint64 subscriptionId,
@@ -59,6 +63,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         if(msg.value < i_mintFee) {
             revert RandomIpfsNft__NeedMoreETHSent();
         }
+        // Makes the request to chainlink node to get a random number
         requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
@@ -67,6 +72,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
             NUM_WORDS
         );
         s_requestIdToSender[requestId] = msg.sender;
+        emit NftRequested(requestId, msg.sender);
     }
 
     function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override {
@@ -82,11 +88,12 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         Breed dogBreed = getBreedFromModdedRng(moddedRng);
         _safeMint(dogOwner, newTokenId);
         _setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)]);
+        emit NftMinted(dogBreed, dogOwner);
     }
 
     function withdraw() public onlyOwner {
         uint256 amount = address(this).balance;
-        (bool, success, ) = payable(msg.sender).call{value: amount}("");
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
         if(!success) {
             revert RandomIpfsNft__TransferFailed();
         }
@@ -112,7 +119,15 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         return [10, 30, MAX_CHANCE_VALUE];
     }
 
-    function tokenURI(uint256) public view override returns (string memory) {
+    function getMintFee() public view returns(uint256) {
+        return i_mintFee;
+    }
 
+    function getDogTokenUris (uint256 index) public view returns(string memory) {
+        return s_dogTokenUris[index];
+    }
+
+    function getTokenCounter() public view returns(uint256) {
+        return s_tokenCounter;
     }
 }
