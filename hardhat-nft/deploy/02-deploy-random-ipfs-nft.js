@@ -9,6 +9,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const chainId = network.config.chainId;
     let ethUsdPriceFeedAddress, vrfCoordinatorV2Address, subscriptionId;
 
+    // get the ipfs hashes for the images
+    // with our own IPFS node or programmatically
+
+
     if(developmentChains.includes(network.name)) {
         const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address;
