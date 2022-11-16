@@ -19,15 +19,19 @@ const metadataTemplate = {
     ],
 };
 
+tokenUris = [
+    'ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo',
+    'ipfs://QmYQC5aGZu2PTH8XzbJrbDnvhj3gVs7ya33H9mqUNvST3d',
+    'ipfs://QmZYmH5iDbD6v3U2ixoVAjioSzvWJszDzYdbeCLquGSpVm'
+];
+
+const FUND_AMOUNT = ethers.utils.parseEther("0.1");
+
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
-    let ethUsdPriceFeedAddress, vrfCoordinatorV2Address, subscriptionId, tokenUris = [
-        'ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo',
-        'ipfs://QmYQC5aGZu2PTH8XzbJrbDnvhj3gVs7ya33H9mqUNvST3d',
-        'ipfs://QmZYmH5iDbD6v3U2ixoVAjioSzvWJszDzYdbeCLquGSpVm'
-    ];
+    let ethUsdPriceFeedAddress, vrfCoordinatorV2Address, subscriptionId;
 
     // get the ipfs hashes for the images
     if (process.env.UPLOAD_TO_PINATA == "true") {
@@ -46,6 +50,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         const transactionReceipt = await transactionResponse.wait();
         subscriptionId = transactionReceipt.events[0].args.subId;
         console.log("subscriptionId: ", subscriptionId);
+        await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, FUND_AMOUNT);
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2;
         subscriptionId = networkConfig[chainId].subscriptionId;

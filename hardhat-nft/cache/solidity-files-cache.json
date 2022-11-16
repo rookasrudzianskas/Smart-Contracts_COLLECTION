@@ -482,8 +482,8 @@
       ]
     },
     "/Users/rookasrudzianskas/Documents/WEB 3.0/SMART_CONTRACTS/hardhat-nft/contracts/ RandomIpfsNft.sol": {
-      "lastModificationDate": 1668587998776,
-      "contentHash": "e8fdc0d6cc46918ef86f3086df56ab19",
+      "lastModificationDate": 1668588547008,
+      "contentHash": "46819b17fd2ac34d3589cb7badff5ad6",
       "sourceName": "contracts/ RandomIpfsNft.sol",
       "solcConfig": {
         "version": "0.8.8",
