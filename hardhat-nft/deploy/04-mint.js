@@ -40,4 +40,5 @@ module.exports = async ({ getNamedAccounts }) => {
     console.log(`Random IPFS NFT index 0 tokenURI: ${await randomIpfsNft.tokenURI(0)}`);
 }
 
+
 module.exports.tags = ["all", "mint"];
