@@ -23,7 +23,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
-    let ethUsdPriceFeedAddress, vrfCoordinatorV2Address, subscriptionId, tokenUris;
+    let ethUsdPriceFeedAddress, vrfCoordinatorV2Address, subscriptionId, tokenUris = [
+        'ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo',
+        'ipfs://QmYQC5aGZu2PTH8XzbJrbDnvhj3gVs7ya33H9mqUNvST3d',
+        'ipfs://QmZYmH5iDbD6v3U2ixoVAjioSzvWJszDzYdbeCLquGSpVm'
+    ];
 
     // get the ipfs hashes for the images
     if (process.env.UPLOAD_TO_PINATA == "true") {
@@ -35,11 +39,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
 
     if(developmentChains.includes(network.name)) {
+        console.log("Using development chain addresses...");
         const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address;
-        const tx = await vrfCoordinatorV2Mock.createSubscription();
-        const txReceipt = await tx.wait(1);
-        subscriptionId = txReceipt.events[0].args.subscriptionId;
+        const transactionResponse = await vrfCoordinatorV2Mock.createSubscription();
+        const transactionReceipt = await transactionResponse.wait();
+        subscriptionId = transactionReceipt.events[0].args.subId;
+        console.log("subscriptionId: ", subscriptionId);
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2;
         subscriptionId = networkConfig[chainId].subscriptionId;
@@ -47,13 +53,29 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     log("----------------------------------------------------");
 
-    // const args = [
-    //     vrfCoordinatorV2Address,
-    //     subscriptionId,
-    //     networkConfig[chainId].gasLane,
-    //     networkConfig[chainId].callbackGasLimit,
-    //     networkConfig[chainId].mintFee
-    // ];
+    const args = [
+        vrfCoordinatorV2Address,
+        subscriptionId,
+        networkConfig[chainId]["gasLane"],
+        networkConfig[chainId]["mintFee"],
+        networkConfig[chainId]["callbackGasLimit"],
+        tokenUris,
+    ]
+
+    const randomIpfsNft = await deploy("RandomIpfsNft", {
+        from: deployer,
+        args: args,
+        log: true,
+        waitConfirmations: network.config.blockConfirmations || 1,
+    });
+
+    log("----------------------------------------------------");
+
+    // Verify the deployment
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+        log("Verifying...");
+        await verify(randomIpfsNft.address, args);
+    }
 
     async function handleTokenUris() {
         tokenUris = [];
@@ -80,11 +102,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     }
 
 
-    // Verify the deployment
-    // if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
-    //     log("Verifying...")
-    //     await verify(dynamicSvgNft.address, arguments)
-    // }
+
 }
 
 module.exports.tags = ["all", "randomipfs", "main"];
