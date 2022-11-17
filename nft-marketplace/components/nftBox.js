@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useMoralis, useWeb3Contract} from "react-moralis";
 import nftAbi from '../constants/BasicNft.json';
-import Moralis from "moralis-v1";
 
 const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [imageURI, setImageURI] = useState("");
@@ -17,7 +16,14 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
 
     async function updateUI() {
         const tokenURI = await getTokenURI();
-        console.log(tokenURI);
+        if(tokenURI) {
+            // IPFS gateway which will return IPFS files from normal URL
+            const requestUrl = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
+            const tokenURIResponse = await (await fetch(requestUrl)).json();
+            const imageURI = tokenURIResponse.image;
+            const imageURIURL = imageURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
+            setImageURI(imageURIURL);
+        }
     }
 
     useEffect(() => {
