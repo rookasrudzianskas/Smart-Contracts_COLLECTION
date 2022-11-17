@@ -142,9 +142,9 @@ async function main() {
     });
 
     if (listedResponse.success && canceledResponse.success && boughtResponse.success) {
-        console.log("Success! Database Updated with watching events")
+        console.log("Success! Database Updated with watching events");
     } else {
-        console.log("Error! Database not updated with watching events")
+        console.log("Error! Database not updated with watching events");
     }
 }
 
