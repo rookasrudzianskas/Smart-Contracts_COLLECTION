@@ -1,4 +1,5 @@
 const { ethers, network } = require("hardhat");
+const {moveBlocks} = require("../utils/moveBlocks");
 // const { moveBlocks } = require("../utils/move-blocks");
 
 const PRICE = ethers.utils.parseEther("0.1");
@@ -18,6 +19,11 @@ async function mintAndList() {
     console.log("Listing NFT for sale...");
     const tx = await nftMarketplace.listItem(basicNft.address, tokenId, PRICE);
     console.log("Listed NFT for sale");
+    let sleepAmount;
+    if (network.config.chainId == 31337) {
+        // Moralis has a hard time if you move more than 1 at once!
+        await moveBlocks(1, (sleepAmount = 1000))
+    }
 }
 
 mintAndList()
