@@ -14,8 +14,45 @@ async function main() {
     await Moralis.start({ serverUrl, appId, masterKey });
     console.log(`Moralis serverUrl: ${contractAddress}`);
 
-
-
+    let itemListedOptions = {
+        // Moralis understands local chain as 1337
+        chainId: moralisChainId,
+        sync_historical: true,
+        topic: "ItemListed(address,address,uint256,uint256)",
+        address: contractAddress,
+        abi: {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: true,
+                    internalType: "address",
+                    name: "seller",
+                    type: "address",
+                },
+                {
+                    indexed: true,
+                    internalType: "address",
+                    name: "nftAddress",
+                    type: "address",
+                },
+                {
+                    indexed: true,
+                    internalType: "uint256",
+                    name: "tokenId",
+                    type: "uint256",
+                },
+                {
+                    indexed: false,
+                    internalType: "uint256",
+                    name: "price",
+                    type: "uint256",
+                },
+            ],
+            name: "ItemListed",
+            type: "event",
+        },
+        tableName: "ItemListed",
+    }
 }
 
 
