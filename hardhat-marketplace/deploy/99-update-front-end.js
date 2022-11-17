@@ -28,6 +28,7 @@ async function updateAbi() {
         nftMarketplace.interface.format(ethers.utils.FormatTypes.json)
     )
 
+    // For the basic NFT as well.
     const basicNft = await ethers.getContract("BasicNft")
     fs.writeFileSync(
         `${frontEndAbiLocation}BasicNft.json`,
