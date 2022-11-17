@@ -12,6 +12,7 @@ error NftMarketplace__NotApprovedForMarketplace();
 error NftMarketplace__AlreadyListed(address nftAddress, uint256 tokenId);
 error NftMarketplace__NotOwner();
 error NftMarketplace__NotListed(address nftAddress, uint256 tokenId);
+error NftMarketplace__PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
 
 contract NftMarketplace {
 
@@ -29,6 +30,9 @@ contract NftMarketplace {
 
     // NFT contract address => NFT TokenID => Listing
     mapping(address => mapping(uint256 => Listing)) private s_listings;
+
+    // Seller address -> Amount Earned
+    mapping(address => uint256) private s_proceeds;
 
 
     //////////////////////////
@@ -61,8 +65,6 @@ contract NftMarketplace {
         }
         _;
     }
-
-
 
     //////////////////////////
     /////// Main functions////
@@ -99,7 +101,24 @@ contract NftMarketplace {
         // array? mapping? struct?
     }
 
-    function buyItem(address nftAddress, uint256 tokenId) external payable {
-
+    function buyItem(address nftAddress, uint256 tokenId)
+    external
+    payable
+    isListed(nftAddress, tokenId) {
+        // this gets the listing from the mapping and stores it in memory for the rest of the function
+        Listing memory listedItem = s_listings[nftAddress][tokenId];
+        if(msg.value < listedItem.price) {
+            revert NftMarketplace__PriceNotMet(nftAddress, tokenId, listedItem.price);
+        }
+        // We have to keep track of how much money people have earned selling NFTs
+        // We will update the proceeds of seller,
+        // We do not just send the money to seller. Shift the risk
+        // Have them withdraw the money themselves
+        // Sending the money to the seller could be a reentrancy attack ☠️
+        // Have them withdraw the money themselves ✅
+        s_proceeds[listedItem.seller] = s_proceeds[listedItem.seller] + msg.value;
+        // we have to delete the listing of seller
+        delete (s_listings[nftAddress][tokenId]);
+        IERC721(nftAddress).transferFrom(listedItem.seller, msg.sender, tokenId);
     }
 }
