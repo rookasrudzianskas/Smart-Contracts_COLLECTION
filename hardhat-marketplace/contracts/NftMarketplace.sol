@@ -28,6 +28,13 @@ contract NftMarketplace {
         uint256 price
     );
 
+    event ItemBought(
+        address indexed buyer,
+        address indexed nftAddress,
+        uint256 indexed tokenId,
+        uint256 price
+    );
+
     // NFT contract address => NFT TokenID => Listing
     mapping(address => mapping(uint256 => Listing)) private s_listings;
 
@@ -119,6 +126,8 @@ contract NftMarketplace {
         s_proceeds[listedItem.seller] = s_proceeds[listedItem.seller] + msg.value;
         // we have to delete the listing of seller
         delete (s_listings[nftAddress][tokenId]);
-        IERC721(nftAddress).transferFrom(listedItem.seller, msg.sender, tokenId);
+        IERC721(nftAddress).safeTransferFrom(listedItem.seller, msg.sender, tokenId);
+        // Check to make sure NFT was transferred
+        emit ItemBought(msg.sender, nftAddress, tokenId, listedItem.price);
     }
 }
