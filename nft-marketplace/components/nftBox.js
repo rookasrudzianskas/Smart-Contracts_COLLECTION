@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {useWeb3Contract} from "react-moralis";
+import {useMoralis, useWeb3Contract} from "react-moralis";
 import nftAbi from '../constants/BasicNft.json';
 import Moralis from "moralis-v1";
-import isWeb3Enabled from "Moralis.isWeb3Enabled";
 
 const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [imageURI, setImageURI] = useState("");
+    const { isWeb3Enabled, web3, isWeb3EnableLoading } = useMoralis();
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
         contractAddress: nftAddress,
