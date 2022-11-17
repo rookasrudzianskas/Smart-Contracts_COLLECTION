@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/rookasrudzianskas/Documents/WEB 3.0/SMART_CONTRACTS/hardhat-marketplace/contracts/NftMarketplace.sol": {
-      "lastModificationDate": 1668624384698,
-      "contentHash": "a5c0c2c863a199a0f428727dadea669a",
+      "lastModificationDate": 1668670194353,
+      "contentHash": "329db3e01fc2f378ef6c43039170b41e",
       "sourceName": "contracts/NftMarketplace.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -144,6 +144,42 @@
       ],
       "artifacts": [
         "IERC165"
+      ]
+    },
+    "/Users/rookasrudzianskas/Documents/WEB 3.0/SMART_CONTRACTS/hardhat-marketplace/contracts/ReentranceVulnerability.sol": {
+      "lastModificationDate": 1668668762258,
+      "contentHash": "9c44b82585b0299a4165831225dd8669",
+      "sourceName": "contracts/ReentranceVulnerability.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.13"
+      ],
+      "artifacts": [
+        "Attack",
+        "EtherStore"
       ]
     }
   }
