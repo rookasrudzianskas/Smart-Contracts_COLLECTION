@@ -23,6 +23,9 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
             const imageURI = tokenURIResponse.image;
             const imageURIURL = imageURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
             setImageURI(imageURIURL);
+            // We could render on server, but we will do it on client
+            // for the testnets which don't have a lot of ETH
+            // for world to adapt IPFS gateway
         }
     }
 
