@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useMoralis, useWeb3Contract} from "react-moralis";
 import nftAbi from '../constants/BasicNft.json';
+import Image from "next/image";
 
 const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [imageURI, setImageURI] = useState("");
@@ -38,7 +39,23 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
 
     return (
         <div>
-
+            <div>
+                {imageURI ? (
+                    <div>
+                        <Image
+                            loader={() => imageURI}
+                            src={imageURI}
+                            alt="Picture of the author"
+                            width={200}
+                            height={200}
+                        />
+                    </div>
+                ) : (
+                    <div>
+                        Loading...
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
