@@ -53,6 +53,78 @@ async function main() {
         },
         tableName: "ItemListed",
     }
+
+    let itemBoughtOptions = {
+        chainId: moralisChainId,
+        address: contractAddress,
+        sync_historical: true,
+        topic: "ItemBought(address,address,uint256,uint256)",
+        abi: {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: true,
+                    internalType: "address",
+                    name: "buyer",
+                    type: "address",
+                },
+                {
+                    indexed: true,
+                    internalType: "address",
+                    name: "nftAddress",
+                    type: "address",
+                },
+                {
+                    indexed: true,
+                    internalType: "uint256",
+                    name: "tokenId",
+                    type: "uint256",
+                },
+                {
+                    indexed: false,
+                    internalType: "uint256",
+                    name: "price",
+                    type: "uint256",
+                },
+            ],
+            name: "ItemBought",
+            type: "event",
+        },
+        tableName: "ItemBought",
+    }
+
+    let itemCanceledOptions = {
+        chainId: moralisChainId,
+        address: contractAddress,
+        topic: "ItemCanceled(address,address,uint256)",
+        sync_historical: true,
+        abi: {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: true,
+                    internalType: "address",
+                    name: "seller",
+                    type: "address",
+                },
+                {
+                    indexed: true,
+                    internalType: "address",
+                    name: "nftAddress",
+                    type: "address",
+                },
+                {
+                    indexed: true,
+                    internalType: "uint256",
+                    name: "tokenId",
+                    type: "uint256",
+                },
+            ],
+            name: "ItemCanceled",
+            type: "event",
+        },
+        tableName: "ItemCanceled",
+    }
 }
 
 
