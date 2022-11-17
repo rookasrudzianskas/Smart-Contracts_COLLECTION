@@ -8,6 +8,19 @@ Moralis.Cloud.afterSave("ItemListed", async (request) => {
         logger.info("Found item!");
         const ActiveItem = Moralis.Object.extend("ActiveItem");
 
+        const query = new Moralis.Query(ActiveItem);
+        query.equalTo("nftAddress", request.object.get("nftAddress"));
+        query.equalTo("tokenId", request.object.get("tokenId"));
+        query.equalTo("marketplaceAddress", request.object.get("seller"));
+        query.equalTo("seller", request.object.get("seller"));
+        const alreadyListedItem = await query.first();
+        if(alreadyListedItem) {
+            logger.info("Deleting old item");
+            logger.info(request.object.get("objectId"));
+            await alreadyListedItem.destroy();
+            logger.info("Deleted an old item with token id", request.object.get("tokenId"), "at address ", request.object.get("address"),  "from the ActiveItem table");
+        }
+
         const activeItem = new ActiveItem();
         // We are getting all information from the event
         activeItem.set("marketplaceAddress", request.object.get("address"));
