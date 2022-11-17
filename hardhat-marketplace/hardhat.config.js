@@ -11,21 +11,19 @@ require("dotenv").config();
  */
 
 const MAINNET_RPC_URL =
-    process.env.MAINNET_RPC_URL ||
-    process.env.ALCHEMY_MAINNET_RPC_URL ||
-    "https://eth-mainnet.alchemyapi.io/v2/your-api-key"
-const GOERLI_RPC_URL =
-    process.env.GOERLI_RPC_URL || "https://eth-goerli.alchemyapi.io/v2/your-api-key"
-const POLYGON_MAINNET_RPC_URL =
-    process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
-const PRIVATE_KEY = process.env.PRIVATE_KEY || "0x"
+    `${process.env.MAINNET_RPC_URL}` ||
+    `${process.env.ALCHEMY_MAINNET_RPC_URL}`; // Alchemy
+const GOERLI_RPC_URL = `${process.env.GOERLI_RPC_URL}`; // Infura
+const POLYGON_MAINNET_RPC_URL = `${process.env.POLYGON_MAINNET_RPC_URL}`;
+const PRIVATE_KEY = `${process.env.PRIVATE_KEY}`;
 // optional
-const MNEMONIC = process.env.MNEMONIC || "your mnemonic"
+const MNEMONIC = `${process.env.MNEMONIC}`;
 
-// Your API key for Etherscan, obtain one at https://etherscan.io/
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API key"
-const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "Your polygonscan API key"
-const REPORT_GAS = process.env.REPORT_GAS || false
+const ETHERSCAN_API_KEY = `${process.env.ETHERSCAN_API_KEY}`;
+const POLYGONSCAN_API_KEY = `${process.env.POLYGONSCAN_API_KEY}`;
+const REPORT_GAS = process.env.REPORT_GAS ? true : false;
+
+if(!PRIVATE_KEY || !MNEMONIC || !ETHERSCAN_API_KEY || !POLYGONSCAN_API_KEY || !MAINNET_RPC_URL || !GOERLI_RPC_URL || !POLYGON_MAINNET_RPC_URL ) return;
 
 module.exports = {
   defaultNetwork: "hardhat",
@@ -42,7 +40,7 @@ module.exports = {
     },
     goerli: {
       url: GOERLI_RPC_URL,
-      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      accounts: process.env.PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
       //   accounts: {
       //     mnemonic: MNEMONIC,
       //   },
@@ -51,7 +49,7 @@ module.exports = {
     },
     mainnet: {
       url: MAINNET_RPC_URL,
-      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      accounts: process.env.PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
       //   accounts: {
       //     mnemonic: MNEMONIC,
       //   },
@@ -60,7 +58,7 @@ module.exports = {
     },
     polygon: {
       url: POLYGON_MAINNET_RPC_URL,
-      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      accounts: process.env.PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
       saveDeployments: true,
       chainId: 137,
     },
