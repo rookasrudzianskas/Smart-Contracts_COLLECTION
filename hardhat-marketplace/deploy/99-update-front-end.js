@@ -53,4 +53,5 @@ async function updateContractAddresses() {
     fs.writeFileSync(frontEndContractsFile, JSON.stringify(contractAddresses))
     fs.writeFileSync(frontEndContractsFile2, JSON.stringify(contractAddresses))
 }
+
 module.exports.tags = ["all", "frontend"]
