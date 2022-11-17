@@ -6,7 +6,7 @@ import {Card} from "web3uikit";
 
 const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [imageURI, setImageURI] = useState("");
-    const { isWeb3Enabled, web3, isWeb3EnableLoading } = useMoralis();
+    const { isWeb3Enabled, web3, isWeb3EnableLoading, account } = useMoralis();
     const [tokenName, setTokenName] = useState("");
     const [tokenDescription, setTokenDescription] = useState("");
     const { runContractFunction: getTokenURI } = useWeb3Contract({
@@ -17,6 +17,9 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
             tokenId: tokenId,
         }
     });
+
+    const isOwnedByUser = account === seller || seller === undefined;
+    const formattedSellerAddress = "You" ? seller.slice(0, 6) + "..." + seller.slice(-4) : "N/A";
 
     async function updateUI() {
         const tokenURI = await getTokenURI();
@@ -54,7 +57,7 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
                             <div className="p-2">
                                 <div className="flex flex-col items-end gap-2">
                                     <div>#{tokenId}</div>
-                                    <div className="italic">Owned by: {seller.slice(0, 6)}...{seller.slice(38, 42)}</div>
+                                    <div className="italic">Owned by: {formattedSellerAddress}</div>
                                     <Image
                                         loader={() => imageURI}
                                         src={imageURI}
