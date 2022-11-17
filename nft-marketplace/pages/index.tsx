@@ -12,25 +12,27 @@ const Home: NextPage = () => {
     );
     console.log(listedNfts);
     return (
-        <div className="max-w-7xl mx-auto">
-            {fetchingListedNfts ? <p>Loading...</p> : (
-                <>
-                    {listedNfts?.map((nft) => {
-                        const { price, nftAddress, tokenId, marketplaceAddress, seller } = nft.attributes;
-                        return (
-                            <div key={nft.id}>
+        <div className="max-w-7xl mx-auto container">
+            <h1 className="py-4 px-4 font-bold text-2xl">Recently Listed</h1>
+            <div className="flex flex-wrap">
+                {fetchingListedNfts ? <p>Loading...</p> : (
+                    <>
+                        {listedNfts?.map((nft) => {
+                            const { price, nftAddress, tokenId, marketplaceAddress, seller } = nft.attributes;
+                            return (
                                 <NftBox
+                                    key={nft.id}
                                     price={price}
                                     nftAddress={nftAddress}
                                     tokenId={tokenId}
                                     marketplaceAddress={marketplaceAddress}
                                     seller={seller}
                                 />
-                            </div>
-                        )
-                    })}
-                </>
-            )}
+                            )
+                        })}
+                    </>
+                )}
+            </div>
         </div>
     )
 }
