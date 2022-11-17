@@ -52,3 +52,29 @@ Moralis.Cloud.afterSave("ItemCancelled", async (request) => {
        }
    }
 });
+
+Moralis.Cloud.afterSave("ItemBought", async (request) => {
+    const confirmed = request.object.get("confirmed");
+    const logger = Moralis.Cloud.getLogger();
+    logger.info(`Marketplace | Object: ${request.object}`);
+    if(confirmed) {
+        logger.info("Looking for the bought TX items");
+        const ActiveItem = Moralis.Object.extend("ActiveItem");
+        const query = new Moralis.Query(ActiveItem);
+        query.equalTo("marketplaceAddress", request.object.get("address"));
+        query.equalTo("nftAddress", request.object.get("nftAddress"));
+        query.equalTo("tokenId", request.object.get("tokenId"));
+        logger.info(`Marketplace | Query: ${query}`);
+        const boughtItem = await query.first();
+        if(boughtItem) {
+            logger.info("Found item!", boughtItem);
+            logger.info(
+                `Deleted item with tokenId ${request.object.get("objectId")} at address ${request.object.get("address")} since it was bought. ` );
+            await boughtItem.destroy();
+        } else {
+            logger.info(
+                `No item bought with address: ${request.object.get("address")} and tokenId: ${request.object.get("tokenId")} found.`
+            );
+        }
+    }
+});
