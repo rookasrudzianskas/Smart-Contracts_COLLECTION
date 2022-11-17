@@ -4,6 +4,13 @@ import nftAbi from '../constants/BasicNft.json';
 import Image from "next/image";
 import {Card} from "web3uikit";
 
+const truncateString = (str, num) => {
+    if (str.length <= num) {
+        return str;
+    }
+    return str.slice(0, num) + '...';
+}
+
 const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [imageURI, setImageURI] = useState("");
     const { isWeb3Enabled, web3, isWeb3EnableLoading, account } = useMoralis();
