@@ -14,6 +14,7 @@ async function main() {
     await Moralis.start({ serverUrl, appId, masterKey });
     console.log(`Moralis serverUrl: ${contractAddress}`);
 
+    // Then the event happens, stick them into the database
     let itemListedOptions = {
         // Moralis understands local chain as 1337
         chainId: moralisChainId,
@@ -124,6 +125,26 @@ async function main() {
             type: "event",
         },
         tableName: "ItemCanceled",
+    }
+
+
+
+    const listedResponse = await Moralis.Cloud.run("watchContractEvent", itemListedOptions, {
+        useMasterKey: true,
+    });
+
+    const boughtResponse = await Moralis.Cloud.run("watchContractEvent", itemBoughtOptions, {
+        useMasterKey: true,
+    });
+
+    const canceledResponse = await Moralis.Cloud.run("watchContractEvent", itemCanceledOptions, {
+        useMasterKey: true,
+    });
+
+    if (listedResponse.success && canceledResponse.success && boughtResponse.success) {
+        console.log("Success! Database Updated with watching events")
+    } else {
+        console.log("Error! Database not updated with watching events")
     }
 }
 
