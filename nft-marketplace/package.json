@@ -6,9 +6,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@web3uikit/core": "^0.2.16",
+    "@web3uikit/icons": "^0.2.12",
+    "@web3uikit/web3": "^0.2.2",
+    "moralis": "^2.7.4",
     "next": "latest",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-moralis": "^1.4.2",
+    "web3uikit": "^1.0.4"
   },
   "devDependencies": {
     "@types/node": "18.11.3",
