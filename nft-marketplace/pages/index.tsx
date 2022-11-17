@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Header from '../components/Header';
 import {useMoralisQuery} from "react-moralis";
+import NftBox from '../components/NftBox';
 
 const Home: NextPage = () => {
     const {data: listedNfts, isFetching: fetchingListedNfts} = useMoralisQuery(
@@ -18,13 +19,12 @@ const Home: NextPage = () => {
                         const { price, nftAddress, tokenId, marketplaceAddress, seller } = nft.attributes;
                         return (
                             <div key={nft.id}>
-                                <p>{price}</p>
-                                <p>{nftAddress}</p>
-                                <Image
-                                    src={seller}
-                                    alt={seller}
-                                    width={300}
-                                    height={300}
+                                <NftBox
+                                    price={price}
+                                    nftAddress={nftAddress}
+                                    tokenId={tokenId}
+                                    marketplaceAddress={marketplaceAddress}
+                                    seller={seller}
                                 />
                             </div>
                         )
