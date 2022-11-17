@@ -16,5 +16,7 @@ Moralis.Cloud.afterSave("ItemListed", async (request) => {
         activeItem.set("tokenId", request.object.get("tokenId"));
         activeItem.set("seller", request.object.get("seller"));
         logger.info(`Marketplace | Query: ${request.object.get("address")}. Token ID:  ${request.object.get("tokenId")}`);
+        logger.info("Saving item to ActiveItem");
+        await activeItem.save();
     }
 });
