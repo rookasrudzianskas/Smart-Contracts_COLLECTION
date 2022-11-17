@@ -6,7 +6,7 @@
       "contentHash": "329db3e01fc2f378ef6c43039170b41e",
       "sourceName": "contracts/NftMarketplace.sol",
       "solcConfig": {
-        "version": "0.8.17",
+        "version": "0.8.13",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -19,12 +19,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -44,7 +51,7 @@
       "contentHash": "a8e2d1c30042f64ed89c9d4157eb6cb9",
       "sourceName": "@openzeppelin/contracts/security/ReentrancyGuard.sol",
       "solcConfig": {
-        "version": "0.8.17",
+        "version": "0.8.13",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -57,12 +64,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -79,7 +93,7 @@
       "contentHash": "eb7e61db29f31d88b3c1cef1b063d338",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
       "solcConfig": {
-        "version": "0.8.17",
+        "version": "0.8.13",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -92,12 +106,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -116,7 +137,7 @@
       "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
       "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
       "solcConfig": {
-        "version": "0.8.17",
+        "version": "0.8.13",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -129,12 +150,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -151,7 +179,7 @@
       "contentHash": "9c44b82585b0299a4165831225dd8669",
       "sourceName": "contracts/ReentranceVulnerability.sol",
       "solcConfig": {
-        "version": "0.8.17",
+        "version": "0.8.13",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -164,12 +192,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
