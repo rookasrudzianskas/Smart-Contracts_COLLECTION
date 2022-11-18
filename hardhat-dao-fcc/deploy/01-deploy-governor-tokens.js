@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var helper_functions_1 = require("../helper-functions");
 var helper_hardhat_config_1 = require("../helper-hardhat-config");
+var hardhat_1 = require("hardhat");
 var deployGovernanceToken = function (hre) {
     return __awaiter(this, void 0, void 0, function () {
         var getNamedAccounts, deployments, network, deploy, log, deployer, governanceToken;
@@ -66,10 +67,38 @@ var deployGovernanceToken = function (hre) {
                 case 3:
                     _a.sent();
                     _a.label = 4;
-                case 4: return [2 /*return*/];
+                case 4:
+                    log("Delegating to ".concat(deployer));
+                    return [4 /*yield*/, delegate(governanceToken.address, deployer)];
+                case 5:
+                    _a.sent();
+                    log("Delegated!");
+                    return [2 /*return*/];
             }
         });
     });
 };
+var delegate = function (governanceTokenAddress, delegatedAccount) { return __awaiter(void 0, void 0, void 0, function () {
+    var governanceToken, transactionResponse, _a, _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
+            case 0: return [4 /*yield*/, hardhat_1.ethers.getContractAt("GovernanceToken", governanceTokenAddress)];
+            case 1:
+                governanceToken = _d.sent();
+                return [4 /*yield*/, governanceToken.delegate(delegatedAccount)];
+            case 2:
+                transactionResponse = _d.sent();
+                return [4 /*yield*/, transactionResponse.wait(1)];
+            case 3:
+                _d.sent();
+                _b = (_a = console).log;
+                _c = "Checkpoints: ".concat;
+                return [4 /*yield*/, governanceToken.numCheckpoints(delegatedAccount)];
+            case 4:
+                _b.apply(_a, [_c.apply("Checkpoints: ", [_d.sent()])]);
+                return [2 /*return*/];
+        }
+    });
+}); };
 deployGovernanceToken.tags = ["all", "governor"];
 //# sourceMappingURL=01-deploy-governor-tokens.js.map
