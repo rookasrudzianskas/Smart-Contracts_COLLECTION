@@ -14,7 +14,7 @@ const GET_ACTIVE_ITEMS = gql`
 `
 
 export default function GraphExample() {
-    const { loading, error, data } = useQuery(GET_ACTIVE_ITEMS)
-    console.log(data)
-    return <div>hi</div>
+    const { loading, error, data } = useQuery(GET_ACTIVE_ITEMS);
+    console.log("Data >>>", data);
+    return <div>hi, Rokas!</div>
 }
