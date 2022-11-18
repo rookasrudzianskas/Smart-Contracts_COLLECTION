@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Input, Modal, useNotification} from "@web3uikit/core";
 
 const UpdateListingModal = ({
@@ -10,6 +10,8 @@ const UpdateListingModal = ({
                             }) => {
 
     const dispatch = useNotification();
+    const [priceToUpdateListingWith, setPriceToUpdateListingWith] = useState(0);
+
 
     return (
         <Modal
@@ -30,7 +32,7 @@ const UpdateListingModal = ({
                 name="New listing price"
                 type="number"
                 onChange={(event) => {
-                    // setPriceToUpdateListingWith(event.target.value)
+                    setPriceToUpdateListingWith(event.target.value)
                 }}
             />
         </Modal>
