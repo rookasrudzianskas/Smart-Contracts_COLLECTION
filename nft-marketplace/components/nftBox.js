@@ -3,6 +3,7 @@ import {useMoralis, useWeb3Contract} from "react-moralis";
 import nftAbi from '../constants/BasicNft.json';
 import Image from "next/image";
 import {Card} from "web3uikit";
+import { ethers } from "ethers";
 
 const truncateString = (str, num) => {
     if (str.length <= num) {
