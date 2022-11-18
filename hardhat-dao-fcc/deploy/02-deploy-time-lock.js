@@ -36,9 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var helper_functions_1 = require("../helper-functions");
+var helper_hardhat_config_1 = require("../helper-hardhat-config");
 var deployTimeLock = function (hre) {
     return __awaiter(this, void 0, void 0, function () {
-        var getNamedAccounts, deployments, network, deploy, log, deployer;
+        var getNamedAccounts, deployments, network, deploy, log, deployer, timeLock;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -49,7 +51,21 @@ var deployTimeLock = function (hre) {
                     deployer = (_a.sent()).deployer;
                     log("----------------------------------------------------");
                     log("Deploying TimeLock and waiting for confirmations...");
-                    return [2 /*return*/];
+                    return [4 /*yield*/, deploy("TimeLock", {
+                            from: deployer,
+                            args: [helper_hardhat_config_1.MIN_DELAY, [], []],
+                            log: true,
+                            waitConfirmations: helper_hardhat_config_1.networkConfig[network.name].blockConfirmations || 1
+                        })];
+                case 2:
+                    timeLock = _a.sent();
+                    log("TimeLock deployed at ".concat(timeLock.address));
+                    if (!(!helper_hardhat_config_1.developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY)) return [3 /*break*/, 4];
+                    return [4 /*yield*/, (0, helper_functions_1["default"])(timeLock.address, [])];
+                case 3:
+                    _a.sent();
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });
