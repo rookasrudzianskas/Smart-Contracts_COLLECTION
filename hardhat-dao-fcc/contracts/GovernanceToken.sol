@@ -11,6 +11,7 @@ contract GovernanceToken is ERC20Votes {
     }
 
     // The functions below are overrides required by Solidity.
+
     function _afterTokenTransfer(
         address from,
         address to,
