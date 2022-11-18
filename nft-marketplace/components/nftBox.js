@@ -5,14 +5,22 @@ import Image from "next/image";
 import {Card} from "web3uikit";
 import { ethers } from "ethers";
 import UpdateListingModal from "./UpdateListingModal";
+import nftMarketplaceAbi from '../constants/NftMarketplace.json';
 
-const truncateString = (str, num) => {
-    if (str.length <= num) {
-        return str;
-    }
-    return str.slice(0, num) + '...';
+const truncateStr = (fullStr, strLen) => {
+    if (fullStr.length <= strLen) return fullStr
+
+    const separator = "..."
+    const seperatorLength = separator.length
+    const charsToShow = strLen - seperatorLength
+    const frontChars = Math.ceil(charsToShow / 2)
+    const backChars = Math.floor(charsToShow / 2)
+    return (
+        fullStr.substring(0, frontChars) +
+        separator +
+        fullStr.substring(fullStr.length - backChars)
+    )
 }
-
 const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [imageURI, setImageURI] = useState("");
     const { isWeb3Enabled, web3, isWeb3EnableLoading, account } = useMoralis();
@@ -20,12 +28,24 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [tokenDescription, setTokenDescription] = useState("");
     const [showModal, setShowModal] = useState(false);
     const hideModal = () => setShowModal(false);
+    const dispatch = useNotification();
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
         contractAddress: nftAddress,
         functionName: 'tokenURI',
         params: {
             tokenId: tokenId,
+        }
+    });
+
+    const { runContractFunction: buyItem } = useWeb3Contract({
+        abi: nftMarketplaceAbi,
+        contractAddress: marketplaceAddress,
+        functionName: 'buyItem',
+        msgValue: price,
+        params: {
+            tokenId: tokenId,
+            nftAddress: nftAddress,
         }
     });
 
@@ -55,10 +75,27 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
         }
     }, [isWeb3Enabled]);
 
-    const handleCardClick = () => {
-        isOwnedByUser ? setShowModal(true) : console.log("You can't buy this NFT");
+    const handleBuyItemSuccess = async (tx) => {
+        await tx.wait(1);
+        dispatch({
+            type: "success",
+            message: "Item bought!",
+            title: "Item Bought",
+            position: "topR",
+        });
     }
 
+    const handleCardClick = () => {
+        isOwnedByUser ? setShowModal(true) : buyItem({
+            onError: (error) => {
+                console.log(error)
+            },
+            onSuccess: (tx) => {
+                console.log(tx);
+                handleBuyItemSuccess(tx);
+            }
+        });
+    }
 
     return (
         <div>
