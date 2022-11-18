@@ -3,6 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ethers-simple-storage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/graph-nft-marketplace-fcc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/graph-nft-marketplace-fcc/nft-marketplace" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/hardhat-play" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/smartcontract-lottery" vcs="Git" />
   </component>
