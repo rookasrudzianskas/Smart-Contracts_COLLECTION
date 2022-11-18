@@ -7,6 +7,7 @@
       </Languages>
     </inspection_tool>
     <inspection_tool class="JSCheckFunctionSignatures" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="JSUnresolvedVariable" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="NoReturn" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ResolveName" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>

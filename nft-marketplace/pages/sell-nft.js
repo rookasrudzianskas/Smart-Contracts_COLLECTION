@@ -44,7 +44,7 @@ const SellNft = ({}) => {
     async function handleApproveSuccess(nftAddress, tokenId, price) {
         console.log("Ok! Now time to list");
         const listOptions = {
-            abi: nftMarketplaceAbi,
+            abi:  nftMarketplaceAbi,
             contractAddress: marketplaceAddress,
             functionName: "listItem",
             params: {
@@ -57,7 +57,9 @@ const SellNft = ({}) => {
         await runContractFunction({
             params: listOptions,
             onSuccess: handleListSuccess,
-            onError: (error) => console.log(error),
+            onError: (error) => {
+                console.log(error)
+            }
         });
     }
 
