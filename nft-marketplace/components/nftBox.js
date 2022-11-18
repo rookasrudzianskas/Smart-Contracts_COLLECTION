@@ -19,6 +19,7 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const [tokenName, setTokenName] = useState("");
     const [tokenDescription, setTokenDescription] = useState("");
     const [showModal, setShowModal] = useState(false);
+    const hideModal = () => setShowModal(false);
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
         contractAddress: nftAddress,
@@ -64,7 +65,12 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
             <div>
                 {imageURI ? (
                     <div>
-                        <UpdateListingModal isVisible={showModal} />
+                        <UpdateListingModal
+                            tokenId={tokenId}
+                            marketplaceAddress={marketplaceAddress}
+                            nftAddress={nftAddress}
+                            onClose={hideModal}
+                            isVisible={showModal} />
                         <Card
                             onClick={handleCardClick}
                             title={tokenName}
