@@ -18,10 +18,10 @@ export default function Home() {
             <div className="flex flex-wrap">
                 {isWeb3Enabled ? (
                     loading || !listedNfts ? (
-                        <div>Loading...</div>
+                        <div className="text-xl font-semibold">Loading...</div>
                     ) : (
                         listedNfts.activeItems.map((nft) => {
-                            console.log(nft)
+                            console.log(nft);
                             const { price, nftAddress, tokenId, seller } = nft
                             return (
                                 <NFTBox

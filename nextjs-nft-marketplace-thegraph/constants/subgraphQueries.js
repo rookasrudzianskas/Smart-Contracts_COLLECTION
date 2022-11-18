@@ -12,4 +12,4 @@ const GET_ACTIVE_ITEMS = gql`
         }
     }
 `
-export default GET_ACTIVE_ITEMS
+export default GET_ACTIVE_ITEMS;
