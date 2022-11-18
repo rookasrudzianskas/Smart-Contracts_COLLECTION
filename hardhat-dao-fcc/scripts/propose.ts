@@ -39,12 +39,12 @@ export async function propose(args: any[], functionToCall: string, proposalDescr
     proposals[network.config.chainId!.toString()].push(proposalId.toString());
     fs.writeFileSync(proposalsFile, JSON.stringify(proposals));
 
-    // // The state of the proposal. 1 is not passed. 0 is passed.
-    // console.log(`Current Proposal State: ${proposalState}`)
-    // // What block # the proposal was snapshot
-    // console.log(`Current Proposal Snapshot: ${proposalSnapShot}`)
-    // // The block number the proposal voting expires
-    // console.log(`Current Proposal Deadline: ${proposalDeadline}`)
+    // The state of the proposal. 1 is not passed. 0 is passed.
+    console.log(`Current Proposal State: ${proposalState}`);
+    // What block # the proposal was snapshot
+    console.log(`Current Proposal Snapshot: ${proposalSnapShot}`);
+    // The block number the proposal voting expires
+    console.log(`Current Proposal Deadline: ${proposalDeadline}`);
 }
 
 propose([NEW_STORE_VALUE], FUNC, PROPOSAL_DESCRIPTION)

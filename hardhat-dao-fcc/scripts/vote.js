@@ -36,66 +36,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.propose = void 0;
-// @ts-nocheck
+exports.vote = void 0;
+var fs = require("fs");
 var hardhat_1 = require("hardhat");
 var helper_hardhat_config_1 = require("../helper-hardhat-config");
-var fs = require("fs");
 var move_blocks_1 = require("../utils/move-blocks");
-function propose(args, functionToCall, proposalDescription) {
+var index = 0;
+function main(proposalIndex) {
     return __awaiter(this, void 0, void 0, function () {
-        var governor, box, encodedFunctionCall, proposeTx, proposedReceipt, proposalId, proposalState, proposalSnapShot, proposalDeadline, proposals;
+        var proposals, proposalId, voteWay, reason;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, hardhat_1.ethers.getContract("GovernorContract")];
-                case 1:
-                    governor = _a.sent();
-                    return [4 /*yield*/, hardhat_1.ethers.getContract("Box")];
-                case 2:
-                    box = _a.sent();
-                    encodedFunctionCall = box.interface.encodeFunctionData(functionToCall, args);
-                    console.log("Proposing ".concat(functionToCall, " on ").concat(box.address, " with ").concat(args));
-                    console.log("Proposal Description:\n  ".concat(proposalDescription));
-                    return [4 /*yield*/, governor.propose([box.address], [0], [encodedFunctionCall], proposalDescription)];
-                case 3:
-                    proposeTx = _a.sent();
-                    if (!helper_hardhat_config_1.developmentChains.includes(hardhat_1.network.name)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, (0, move_blocks_1.moveBlocks)(helper_hardhat_config_1.VOTING_DELAY)];
-                case 4:
-                    _a.sent();
-                    _a.label = 5;
-                case 5: return [4 /*yield*/, proposeTx.wait(1)];
-                case 6:
-                    proposedReceipt = _a.sent();
-                    proposalId = proposeReceipt.events[0].args.proposalId;
-                    console.log("Proposed with proposal ID:\n  ".concat(proposalId));
-                    return [4 /*yield*/, governor.state(proposalId)];
-                case 7:
-                    proposalState = _a.sent();
-                    return [4 /*yield*/, governor.proposalSnapshot(proposalId)];
-                case 8:
-                    proposalSnapShot = _a.sent();
-                    return [4 /*yield*/, governor.proposalDeadline(proposalId)];
-                case 9:
-                    proposalDeadline = _a.sent();
+                case 0:
                     proposals = JSON.parse(fs.readFileSync(helper_hardhat_config_1.proposalsFile, "utf8"));
-                    proposals[hardhat_1.network.config.chainId.toString()].push(proposalId.toString());
-                    fs.writeFileSync(helper_hardhat_config_1.proposalsFile, JSON.stringify(proposals));
-                    // The state of the proposal. 1 is not passed. 0 is passed.
-                    console.log("Current Proposal State: ".concat(proposalState));
-                    // What block # the proposal was snapshot
-                    console.log("Current Proposal Snapshot: ".concat(proposalSnapShot));
-                    // The block number the proposal voting expires
-                    console.log("Current Proposal Deadline: ".concat(proposalDeadline));
+                    proposalId = proposals[hardhat_1.network.config.chainId][proposalIndex];
+                    voteWay = 1;
+                    reason = "I lika do da cha cha";
+                    return [4 /*yield*/, vote(proposalId, voteWay, reason)];
+                case 1:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-exports.propose = propose;
-propose([helper_hardhat_config_1.NEW_STORE_VALUE], helper_hardhat_config_1.FUNC, helper_hardhat_config_1.PROPOSAL_DESCRIPTION)
+// 0 = Against, 1 = For, 2 = Abstain for this example
+function vote(proposalId, voteWay, reason) {
+    return __awaiter(this, void 0, void 0, function () {
+        var governor, voteTx, voteTxReceipt, proposalState;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log("Voting...");
+                    return [4 /*yield*/, hardhat_1.ethers.getContract("GovernorContract")];
+                case 1:
+                    governor = _a.sent();
+                    return [4 /*yield*/, governor.castVoteWithReason(proposalId, voteWay, reason)];
+                case 2:
+                    voteTx = _a.sent();
+                    return [4 /*yield*/, voteTx.wait(1)];
+                case 3:
+                    voteTxReceipt = _a.sent();
+                    console.log(voteTxReceipt.events[0].args.reason);
+                    return [4 /*yield*/, governor.state(proposalId)];
+                case 4:
+                    proposalState = _a.sent();
+                    console.log("Current Proposal State: ".concat(proposalState));
+                    if (!helper_hardhat_config_1.developmentChains.includes(hardhat_1.network.name)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, (0, move_blocks_1.moveBlocks)(helper_hardhat_config_1.VOTING_PERIOD + 1)];
+                case 5:
+                    _a.sent();
+                    _a.label = 6;
+                case 6: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.vote = vote;
+main(index)
     .then(function () { return process.exit(0); })["catch"](function (error) {
     console.error(error);
     process.exit(1);
 });
-//# sourceMappingURL=propose.js.map
+//# sourceMappingURL=vote.js.map
