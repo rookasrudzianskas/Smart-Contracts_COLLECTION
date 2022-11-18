@@ -4,6 +4,7 @@ import nftAbi from '../constants/BasicNft.json';
 import Image from "next/image";
 import {Card} from "web3uikit";
 import { ethers } from "ethers";
+import UpdateListingModal from "./UpdateListingModal";
 
 const truncateString = (str, num) => {
     if (str.length <= num) {
@@ -17,6 +18,7 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
     const { isWeb3Enabled, web3, isWeb3EnableLoading, account } = useMoralis();
     const [tokenName, setTokenName] = useState("");
     const [tokenDescription, setTokenDescription] = useState("");
+    const [showModal, setShowModal] = useState(false);
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
         contractAddress: nftAddress,
@@ -52,13 +54,19 @@ const NftBox = ({ price, nftAddress, tokenId, marketplaceAddress, seller }) => {
         }
     }, [isWeb3Enabled]);
 
+    const handleCardClick = () => {
+        isOwnedByUser ? setShowModal(true) : console.log("You can't buy this NFT");
+    }
+
 
     return (
         <div>
             <div>
                 {imageURI ? (
                     <div>
+                        <UpdateListingModal isVisible={showModal} />
                         <Card
+                            onClick={handleCardClick}
                             title={tokenName}
                             description={tokenDescription}
                         >
